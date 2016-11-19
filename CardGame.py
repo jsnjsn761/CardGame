@@ -5,7 +5,7 @@ import copy
 Game = 'CardGame'
 Version = '0.01'
 Author = 'ChuShu'
-#Test
+
 '''
 進度表:
 
@@ -22,7 +22,8 @@ Author = 'ChuShu'
         主師 未完成
         
         坦克 未完成
-            主力
+        
+    主力
         TD 未完成
             直行攻擊       
         SPG 未完成
@@ -85,7 +86,6 @@ class MainGame(Frame):
         self.turn_end = Button(self, width = 12, height = 5, text = '結束回合')
         self.turn_end.place(x = 350, y = 250)
 
-
         x1 = -60
         self.buttons = [self.button1, self.button2, self.button3, self.button4, self.button5, self.button6, self.button7]
         for button in self.buttons:
@@ -115,26 +115,24 @@ class MainGame(Frame):
         red_handcard = battle.red_handcard
         blue_card = battle.blue_card
         for card in red_card:
-            if card:
-                xy = self.Object_xy(card.pos) + 1
-                self.canvas.itemconfig(xy, fill = '#FF7C80')
+            xy = self.Object_xy(card.pos) + 1
+            self.canvas.itemconfig(xy, fill = '#FF7C80')
 
         for button in self.buttons:
             button['text'] = '---'
             button['state'] = 'disable'
             
         if red_handcard:
-            for i in range(len(red_handcard)):
-                if red_handcard[i] is not None:
-                    card_info = self.cards_show(red_handcard[i])
-                    self.buttons[i]['text'] = card_info
-                    if battle.red_cost >= battle.card_find(battle.red_handcard[i]).cost:
-                        self.buttons[i]['state'] = 'normal'
+            for card, button in zip(red_handcard, self.buttons):
+                if card is not None:
+                    card_info = self.cards_show(card)
+                    button['text'] = card_info
+                    if battle.red_cost >= battle.card_find(card).cost:
+                        button['state'] = 'normal'
                     
         for card in blue_card:
-            if card:
-                xy = self.Object_xy(card.pos) + 1
-                self.canvas.itemconfig((xy), fill = '#4876FF')
+            xy = self.Object_xy(card.pos) + 1
+            self.canvas.itemconfig((xy), fill = '#4876FF')
 
         for card in red_card:
             xy = self.ObjectID - self.ObjectID // 7 * 7, self.ObjectID // 7
@@ -144,11 +142,12 @@ class MainGame(Frame):
 
         self.photo = PhotoImage(file= 'p.png')
         self.photo_none = PhotoImage(file= 'None.png')
-        for i in range(len(self.buttons)):
+        
+        for i, button in enumerate(self.buttons):
             if i < len(red_handcard):
-                self.buttons[i].config(image = self.photo, compound = 'top')
+                button.config(image = self.photo, compound = 'top')
             else:
-                self.buttons[i].config(image = self.photo_none, compound = 'top')
+                button.config(image = self.photo_none, compound = 'top')
                 
     def cards_show(self, name):
         card = battle.card_find(name)
@@ -384,6 +383,7 @@ class combat(object):
         battle.blue_cost += 5
         self.dealt()
 
+        
 root = Tk()
 root.geometry('850x650+0+0')
 main = MainGame(root)
@@ -396,3 +396,5 @@ battle.dealt()
 battle.red_cost = 5
 battle.blue_cost = 5
 main.turn_end['command'] = battle.turn_end
+
+
