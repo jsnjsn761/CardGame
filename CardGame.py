@@ -360,9 +360,6 @@ class combat(object):
                         if card.pos == nearby:
                             dirt_new.remove(nearby)
         return dirt_new
-    
-    def move(self, pos, new_pos):
-        pass
 
     def card_in_class(self, deck):
         cards = []
